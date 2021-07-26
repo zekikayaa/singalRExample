@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SingalrExample.Wep.Business;
 using SingalrExample.Wep.Hubs;
 
 namespace SingalrExample.Wep
@@ -40,10 +41,13 @@ namespace SingalrExample.Wep
                     .AllowCredentials()
                     .SetIsOriginAllowed(origin => true)));
 
+            services.AddTransient<MyBusiness>();
+
             // singalR servisini kullanabilmek  icin ekliyoruzz.
             services.AddSignalR();
 
-            services.AddRazorPages(); 
+            services.AddControllers();
+            services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -71,10 +75,11 @@ namespace SingalrExample.Wep
 
             app.UseEndpoints(endpoints =>
             {
-                // olusturdugumuz Hub icin endPoint olusturuyoruz
-
+                // olusturdugumuz Hub icin endPoint olusturuyoruz 
                 //https://localhost:5001/myhub
                 endpoints.MapHub<MyHub>("/myhub");
+
+                endpoints.MapControllers();
             });
         }
     }
